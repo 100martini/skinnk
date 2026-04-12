@@ -1,4 +1,4 @@
-# skinny link - skinnk 🤏
+# skinny link or skinnk 🤏
 
 url shortener that actually shortens things.
 
