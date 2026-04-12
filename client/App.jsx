@@ -535,7 +535,7 @@ export default function Skinnk() {
       </main>
 
       <footer className="bottom-bar">
-        <span>&copy;<a href="https://github.com/100martini" target="_blank" rel="noreferrer" className="footer-link">Martini</a></span>
+        <span>&copy;<a href="https://github.com/100martini" target="_blank" rel="noreferrer" className="footer-link"> Martini</a></span>
         <span className="footer-sep">--</span>
         <span>Does size really matter?</span>
       </footer>
@@ -564,6 +564,7 @@ export default function Skinnk() {
         .skinnk-app.dark {
           --bg: #111111; --surface: #1e1e1e; --surface2: #2a2a2a;
           --ink: #ffffff; --ink2: #a0a0a0; --ink3: #555555;
+          --accent: #ff7700;
           background-image: none;
         }
         .dark .topbar { background: #ffffff; border-color: #e0e0e0; }
@@ -583,6 +584,9 @@ export default function Skinnk() {
         .dark .field-url::placeholder,
         .dark .field-alias::placeholder,
         .dark .field-search::placeholder { color: #555555; }
+        .dark .composer { border-color: #333333; }
+        .dark .link-list-section { border-color: #333333; }
+        .dark .list-toolbar { border-color: #333333; }
         .dark .dash-card { background: transparent; border-color: #333333; }
         .dark .dash-number { color: var(--accent); }
         .dark .dash-label { color: #555555; letter-spacing: 1.5px; }
@@ -608,7 +612,7 @@ export default function Skinnk() {
         .vt-btn { background: none; border: none; padding: 6px 10px; color: #9e978d; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; }
         .vt-btn.active { background: #111111; color: #ffffff; }
         .vt-btn:first-child { border-right: 1.5px solid #111111; }
-        .main-area { max-width: 780px; margin: 0 auto; padding: 32px 24px 40px; }
+        .main-area { max-width: 780px; margin: 0 auto; padding: 32px 24px 12px; }
         .composer { border: 2px dashed var(--ink); border-radius: var(--radius); padding: 24px; margin-bottom: 24px; background: var(--surface); transition: background 0.25s, border-color 0.25s; }
         .composer-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
         .section-title { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; }
@@ -685,7 +689,7 @@ export default function Skinnk() {
         .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
         .page-btn:hover:not(:disabled) { background: var(--ink); color: var(--bg); }
         .page-info { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ink3); }
-        .bottom-bar { text-align: center; padding: 20px; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--ink3); }
+        .bottom-bar { text-align: center; padding: 10px 20px; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--ink3); }
         .footer-sep { margin: 0 6px; }
         .footer-link { color: var(--ink3); text-decoration: none; transition: color 0.15s; }
         .footer-link:hover { color: var(--accent); }
