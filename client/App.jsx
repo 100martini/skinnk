@@ -210,7 +210,16 @@ export default function Skinnk() {
   const [apiDown, setApiDown] = useState(false);
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState({ total: 0, pages: 1 });
+  const [isDark, setIsDark] = useState(() => localStorage.getItem("skinnk-theme") === "dark");
   const toastCounter = useRef(0);
+
+  const toggleTheme = () => {
+    setIsDark((prev) => {
+      const next = !prev;
+      localStorage.setItem("skinnk-theme", next ? "dark" : "light");
+      return next;
+    });
+  };
 
   const pushToast = useCallback((msg) => {
     const id = ++toastCounter.current;
@@ -343,7 +352,7 @@ export default function Skinnk() {
   const roastIndex = Math.min(globalStats.totalLinks, ROASTS.length - 1);
 
   return (
-    <div className="skinnk-app">
+    <div className={`skinnk-app ${isDark ? "dark" : ""}`}>
       <header className="topbar">
         <div className="logo-area">
           <div className="logo-stamp">skinnk</div>
@@ -351,6 +360,25 @@ export default function Skinnk() {
           {apiDown && <span className="api-badge">api offline</span>}
         </div>
         <div className="topbar-right">
+          <button className="btn-theme" onClick={toggleTheme} title={isDark ? "light mode" : "dark mode"}>
+            {isDark ? (
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+              </svg>
+            ) : (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+              </svg>
+            )}
+          </button>
           <div className="view-toggle">
             <button className={`vt-btn ${view === "list" ? "active" : ""}`} onClick={() => setView("list")}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
@@ -531,18 +559,57 @@ export default function Skinnk() {
         .skinnk-app {
           min-height: 100vh; background: var(--bg); font-family: 'Sora', sans-serif; color: var(--ink);
           background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h1v1H0z' fill='%231a1815' fill-opacity='0.03'/%3E%3C/svg%3E");
+          transition: background 0.25s, color 0.25s;
         }
-        .topbar { display: flex; justify-content: space-between; align-items: center; padding: 18px 32px; border-bottom: 1.5px solid var(--ink); }
+        .skinnk-app.dark {
+          --bg: #111111; --surface: #1e1e1e; --surface2: #2a2a2a;
+          --ink: #ffffff; --ink2: #a0a0a0; --ink3: #555555;
+          background-image: none;
+        }
+        .dark .topbar { background: #ffffff; border-color: #e0e0e0; }
+        .dark .topbar .logo-stamp,
+        .dark .topbar .logo-version { color: #111111; border-color: #aaaaaa; }
+        .dark .topbar .btn-theme { border-color: #111111; color: #111111; }
+        .dark .topbar .btn-theme:hover { background: #111111; color: #ffffff; }
+        .dark .topbar .view-toggle { border-color: #111111; }
+        .dark .topbar .vt-btn { color: #888888; }
+        .dark .topbar .vt-btn:first-child { border-color: #111111; }
+        .dark .topbar .vt-btn.active { background: #111111; color: #ffffff; }
+        .dark .field-url,
+        .dark .field-alias,
+        .dark .field-search { background: #2a2a2a; border-color: #333333; color: #ffffff; }
+        .dark .field-expiry { background: transparent; border-color: #333333; color: var(--accent); background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23c44d2b' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; }
+        .dark .field-expiry option { background: #1c1c1e; color: #f5f5f7; }
+        .dark .field-url::placeholder,
+        .dark .field-alias::placeholder,
+        .dark .field-search::placeholder { color: #555555; }
+        .dark .dash-card { background: transparent; border-color: #333333; }
+        .dark .dash-number { color: var(--accent); }
+        .dark .dash-label { color: #555555; letter-spacing: 1.5px; }
+        .dark .checkmark { background: #1e1e1e; border-color: #444444; }
+        .dark .btn-shrink { background: #ffffff; color: #111111; }
+        .dark .btn-shrink:hover { background: var(--accent); color: #ffffff; }
+        .dark .btn-retry { background: #ffffff; color: #111111; }
+        .dark .page-btn:hover:not(:disabled) { background: #ffffff; color: #111111; }
+        .dark .toast { background: #ffffff; color: #111111; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; padding: 18px 32px; border-bottom: 1.5px solid #e0e0e0; background: #ffffff; transition: border-color 0.25s; }
         .logo-area { display: flex; align-items: baseline; gap: 8px; }
-        .logo-stamp { font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500; letter-spacing: -1px; }
-        .logo-version { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink3); border: 1px solid var(--ink3); padding: 1px 5px; border-radius: 3px; }
+        .logo-stamp { font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500; letter-spacing: -1px; color: #111111; }
+        .logo-version { font-family: 'DM Mono', monospace; font-size: 10px; color: #111111; border: 1px solid #aaaaaa; padding: 1px 5px; border-radius: 3px; }
         .api-badge { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--danger); border: 1px solid var(--danger); padding: 1px 7px; border-radius: 3px; margin-left: 8px; }
-        .view-toggle { display: flex; border: 1.5px solid var(--ink); border-radius: var(--radius); overflow: hidden; }
-        .vt-btn { background: none; border: none; padding: 6px 10px; color: var(--ink3); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; }
-        .vt-btn.active { background: var(--ink); color: var(--bg); }
-        .vt-btn:first-child { border-right: 1.5px solid var(--ink); }
+        .topbar-right { display: flex; align-items: center; gap: 8px; }
+        .btn-theme {
+          width: 32px; height: 32px; border: 1.5px solid #111111; border-radius: var(--radius);
+          background: none; color: #111111; cursor: pointer; display: flex; align-items: center;
+          justify-content: center; transition: all 0.2s; flex-shrink: 0;
+        }
+        .btn-theme:hover { background: #111111; color: #ffffff; }
+        .view-toggle { display: flex; border: 1.5px solid #111111; border-radius: var(--radius); overflow: hidden; }
+        .vt-btn { background: none; border: none; padding: 6px 10px; color: #9e978d; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; }
+        .vt-btn.active { background: #111111; color: #ffffff; }
+        .vt-btn:first-child { border-right: 1.5px solid #111111; }
         .main-area { max-width: 780px; margin: 0 auto; padding: 32px 24px 40px; }
-        .composer { border: 1.5px solid var(--ink); border-radius: var(--radius); padding: 24px; margin-bottom: 24px; background: var(--surface); }
+        .composer { border: 2px dashed var(--ink); border-radius: var(--radius); padding: 24px; margin-bottom: 24px; background: var(--surface); transition: background 0.25s, border-color 0.25s; }
         .composer-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
         .section-title { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; }
         .section-sub { font-size: 11px; color: var(--ink3); font-style: italic; }
@@ -555,17 +622,17 @@ export default function Skinnk() {
         .field-hint { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--danger); padding-left: 2px; animation: hintIn 0.2s ease-out; }
         .composer-row { display: flex; gap: 8px; }
         .field-alias { flex: 1; }
-        .field-expiry { padding: 10px 12px; background: var(--bg); border: 1.5px solid var(--ink); border-radius: var(--radius); font-family: 'DM Mono', monospace; font-size: 12px; color: var(--ink); cursor: pointer; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%231a1815' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; }
+        .field-expiry { padding: 10px 12px; background: var(--bg); border: 1.5px solid var(--ink); border-radius: var(--radius); font-family: 'DM Mono', monospace; font-size: 12px; color: var(--ink); cursor: pointer; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%231a1815' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; transition: all 0.15s; }
         .btn-shrink { padding: 10px 24px; background: var(--ink); color: var(--bg); border: none; border-radius: var(--radius); font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); white-space: nowrap; }
         .btn-shrink:hover { background: var(--accent); }
         .btn-shrink:disabled { opacity: 0.3; cursor: not-allowed; }
         .btn-shrink:active { transform: scale(0.95) !important; }
         .dashboard-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 24px; }
-        .dash-card { background: var(--surface); border: 1.5px solid var(--ink); border-radius: var(--radius); padding: 14px 16px; display: flex; flex-direction: column; gap: 2px; }
+        .dash-card { background: var(--surface); border: 2px dashed var(--ink); border-radius: var(--radius); padding: 14px 16px; display: flex; flex-direction: column; gap: 2px; transition: background 0.25s, border-color 0.25s; }
         .dash-number { font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500; }
         .dash-label { font-size: 10px; color: var(--ink3); text-transform: uppercase; letter-spacing: 0.8px; }
-        .link-list-section { border: 1.5px solid var(--ink); border-radius: var(--radius); overflow: hidden; }
-        .list-toolbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-bottom: 1.5px solid var(--ink); background: var(--surface); }
+        .link-list-section { border: 2px dashed var(--ink); border-radius: var(--radius); overflow: hidden; transition: border-color 0.25s; }
+        .list-toolbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-bottom: 1.5px solid var(--ink); background: var(--surface); transition: background 0.25s, border-color 0.25s; }
         .toolbar-left { display: flex; align-items: center; gap: 4px; flex: 1; }
         .field-search { border: none; background: transparent; flex: 1; padding: 6px 8px; }
         .field-search:focus { box-shadow: none; }
@@ -578,8 +645,8 @@ export default function Skinnk() {
         .checkbox-wrap input:checked + .checkmark::after { content: ''; width: 4px; height: 8px; border: solid var(--bg); border-width: 0 2px 2px 0; transform: rotate(45deg); margin-top: -2px; }
         .link-row { border-bottom: 1px solid var(--surface2); transition: background 0.15s; }
         .link-row:last-child { border-bottom: none; }
-        .link-row:hover { background: rgba(0,0,0,0.015); }
-        .link-row.selected { background: rgba(196,77,43,0.04); }
+        .link-row:hover { background: rgba(128,128,128,0.05); }
+        .link-row.selected { background: rgba(196,77,43,0.06); }
         .link-row-main { display: flex; align-items: center; padding: 14px 16px; gap: 12px; cursor: pointer; }
         .link-row-info { flex: 1; min-width: 0; }
         .link-row-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; flex-wrap: wrap; gap: 8px; }
@@ -596,7 +663,7 @@ export default function Skinnk() {
         .link-row-detail { padding: 0 16px 16px 44px; animation: slideDown 0.25s ease-out; }
         .detail-loading { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--ink3); padding: 12px 0; }
         .detail-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: start; }
-        .detail-card { background: var(--surface); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+        .detail-card { background: var(--surface); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; gap: 10px; transition: background 0.25s; }
         .detail-card a { text-decoration: none; }
         .detail-label { font-family: 'DM Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--ink3); }
         .detail-stats { gap: 6px; }
@@ -614,7 +681,7 @@ export default function Skinnk() {
         .btn-retry { margin-top: 16px; padding: 8px 20px; background: var(--ink); color: var(--bg); border: none; border-radius: var(--radius); font-family: 'DM Mono', monospace; font-size: 12px; cursor: pointer; }
         .btn-retry:hover { background: var(--accent); }
         .pagination { display: flex; justify-content: center; align-items: center; gap: 12px; padding: 14px; border-top: 1px solid var(--surface2); }
-        .page-btn { background: none; border: 1px solid var(--ink); border-radius: var(--radius); padding: 5px 14px; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ink); cursor: pointer; }
+        .page-btn { background: none; border: 1px solid var(--ink); border-radius: var(--radius); padding: 5px 14px; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ink); cursor: pointer; transition: all 0.15s; }
         .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
         .page-btn:hover:not(:disabled) { background: var(--ink); color: var(--bg); }
         .page-info { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ink3); }
