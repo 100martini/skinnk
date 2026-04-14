@@ -80,16 +80,20 @@ function LinkRow({ data, isSelected, onSelect, onDelete, expanded, onExpand, pus
 
   const daysLeft = () => {
     const diff = new Date(data.expiresAt).getTime() - Date.now();
+    if (diff <= 0) return "expired lol";
     const days = Math.floor(diff / 86400000);
-    if (days <= 0) return "expired lol";
+    if (days === 0) {
+      const hours = Math.floor(diff / 3600000);
+      return hours <= 1 ? "< 1h left" : `${hours}h left`;
+    }
     if (days === 1) return "1 day left";
     return `${days}d left`;
   };
 
   const statusColor = () => {
     const diff = new Date(data.expiresAt).getTime() - Date.now();
+    if (diff <= 0) return "var(--danger)";
     const days = Math.floor(diff / 86400000);
-    if (days <= 0) return "var(--danger)";
     if (days <= 3) return "var(--warning)";
     return "var(--alive)";
   };

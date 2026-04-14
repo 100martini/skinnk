@@ -28,6 +28,11 @@ async function handleRedirect(req, res, next) {
           ip: ip,
         },
       }).catch(() => {});
+
+      prisma.link.update({
+        where: { slug },
+        data: { clicks: { increment: 1 } },
+      }).catch(() => {});
     }
 
     res.redirect(301, link.original);

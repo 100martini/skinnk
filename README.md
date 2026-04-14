@@ -32,6 +32,7 @@ that's it. open `http://localhost:3001`.
 ### backend
 
 ```bash
+cd src
 npm install
 cp .env.example .env
 npx prisma migrate dev --name init
@@ -42,7 +43,7 @@ npm run dev
 ### frontend
 
 ```bash
-cd client
+cd src/client
 npm install
 npm run dev
 ```
