@@ -4,3 +4,4 @@ client/dist
 .env
 prisma/migrations
 *.log
+src/client/laragon-wamp.exe
